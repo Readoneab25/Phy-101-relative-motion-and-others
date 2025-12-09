@@ -1,0 +1,290 @@
+
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>phy 101 Interactive Quiz</title>
+  <style>
+    :root{--bg:#0f172a;--card:#111827;--accent:#06b6d4;--muted:#94a3b8;--white:#e6eef6}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(180deg,#071022 0%, #071a2a 100%);color:var(--white);-webkit-font-smoothing:antialiased}
+    .wrap{max-width:920px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;gap:16px}
+    h1{margin:0;font-size:20px}
+    .meta{color:var(--muted);font-size:13px}
+    .card{background:rgba(255,255,255,0.03);padding:20px;border-radius:12px;margin-top:18px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    .question{font-size:18px;margin-bottom:12px}
+    .choices{display:flex;flex-direction:column;gap:8px}
+    .choice{background:#072031;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    .choice:hover{transform:translateY(-2px)}
+    .choice.selected{outline:3px solid rgba(6,182,212,0.12);background:#2babff}
+    .controls{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+    button{background:var(--accent);color:#042029;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--white)}
+    .progress{height:10px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#60a5fa);width:0%}
+    .footer{margin-top:16px;color:var(--muted);font-size:13px}
+    .result{padding:18px;border-radius:10px;background:linear-gradient(180deg, rgba(2,6,23,0.85), rgba(2,6,23,0.6));}
+    .review{margin-top:12px}
+    .q-review{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;margin-bottom:10px}
+    @media(max-width:560px){.wrap{padding:12px}h1{font-size:18px}.question{font-size:16px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>PHY 101 complete Interactive MCQ Quiz</h1>
+        <div class="meta">40 multiple-choice questions </div>
+      </div>
+    </header><div class="card" id="quiz-card">
+  <div class="progress" aria-hidden><i id="progress-bar"></i></div>
+  <div style="height:14px"></div>
+  <div id="q-area">
+    </div>
+
+  <div class="controls">
+    <div style="display:flex;gap:8px">
+      <button id="prevBtn" class="secondary">Previous</button>
+      <button id="nextBtn">Next</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button id="submitBtn" class="secondary">Submit</button>
+      <div style="color:var(--muted);font-size:13px">Q <span id="q-num">1</span> / <span id="q-total">10</span></div>
+    </div>
+  </div>
+
+  <div class="footer">Tip: Select an answer and press Next. You can review answers after submission.</div>
+</div>
+
+<div id="result-area" style="display:none" class="card">
+  <div class="result">
+    <h2 id="score-title"></h2>
+    <p id="score-summary" class="meta"></p>
+  </div>
+  <div class="review" id="review-list"></div>
+  <div style="display:flex;gap:8px;margin-top:12px">
+    <button id="retryBtn">Retake Quiz</button>
+    <button id="exportBtn" class="secondary">Export Results</button>
+  </div>
+</div>
+<br><br><br>
+  <a href="https://wa.me/+2349036795652"><button>Contact The Developer</button></a>
+    <a href="https://wa.me/+2349036795652"><button>Support Project</button></a><br><br>
+   <button onclick="shareOnWhatsApp()">Share Quiz link via WhatsApp</button>
+  <h2>Designed by Readone</h2>
+  </div>
+  
+
+    
+         
+  <script>
+    function shareOnWhatsApp() {
+        const message = "https://https://readoneab25.github.io/Bio-101-ecology-cell/";
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = "whatsapp://send?text=" + encodedMessage;
+        window.open(whatsappUrl, '_blank');
+    }
+    
+
+const QUESTIONS = [
+    // --- TOPIC 1: Space, Time, and Space-time (8 Qs) ---
+    { q: "According to Newton's theory, the concept of time and space is considered:", c: ["Variable", "Relative", "Fixed", "Absolute"], a: 3 },
+    { q: "Space is defined as a boundless, three-dimensional (3-D) extent. What is the dimension of space, implying distance?", c: ["Time", "Mass", "Temperature", "Length (meter)"], a: 3 },
+    { q: "What is a key characteristic of an **Inertial Reference Frame** (IRF)?", c: ["A constantly accelerating frame", "A frame moving in a curve", "A frame where Newton's laws fail", "A frame moving at constant velocity or at rest"], a: 3 },
+    { q: "A non-inertial reference frame is defined as a frame that is:", c: ["Moving at constant velocity", "At rest", "A stationary coordinate system", "Accelerating"], a: 3 },
+    { q: "What mathematical model fuses the three dimensions of space and the one dimension of time into a single four-dimensional continuum?", c: ["Classical Mechanics", "Lorentz Transformation", "Kinematics", "Space-time"], a: 3 },
+    { q: "The condition where the observed time between two events in some frame is larger than the 'proper time' by a factor of gamma is known as:", c: ["Lorentz Contraction", "Space-time Continuum", "Length Contraction", "Time Dilation"], a: 3 },
+    { q: "When applying **Time Dilation**, the 'proper time' is the time measured in the frame where the two events are:", c: ["Far apart in space", "Moving at a constant velocity", "Observed to be larger", "At the same place (same clock)"], a: 3 },
+    { q: "Which transformation equations are used in the special theory of relativity to relate space and time coordinates between two different inertial frames?", c: ["Galilean transformation", "Newtonian equations", "Energy-Momentum transformation", "Lorentz transformation"], a: 3 },
+
+    // --- TOPIC 2: Units and Dimension (4 Qs) ---
+    { q: "Which of the following is NOT one of the fundamental quantities listed in the PHY 115 notes?", c: ["Length", "Mass", "Electric Charge", "Time"], a: 2 },
+    { q: "What is the correct dimension for **Velocity**?", c: ["L", "LT⁻²", "MLT⁻¹", "LT⁻¹"], a: 3 },
+    { q: "What is the correct dimension for **Force**?", c: ["L²T⁻²", "ML²T⁻²", "MLT⁻¹", "MLT⁻²"], a: 3 },
+    { q: "What is the dimension for **Power** (Work/Time)?", c: ["MLT⁻²", "ML²T⁻¹", "MLT⁻³", "ML²T⁻³"], a: 3 },
+
+    // --- TOPIC 3: Scalar and Vector Quantities (8 Qs) ---
+    { q: "A quantity defined only by magnitude (e.g., Mass or Distance) is known as a:", c: ["Dimension", "Tensor", "Vector Quantity", "Scalar Quantity"], a: 3 },
+    { q: "Which physical quantity is characterized by both magnitude and direction, representing the net effect between two points?", c: ["Distance", "Speed", "Mass", "Displacement"], a: 3 },
+    { q: "A physical quantity like **Force** or **Displacement** that is defined by both magnitude and direction is known as a:", c: ["Scalar Quantity", "Dimensionless Quantity", "Tensor", "Vector Quantity"], a: 3 },
+    { q: "If vector A has x-component A_x and y-component A_y, what is the formula for the magnitude of A?", c: ["A_x + A_y", "sqrt(A_x - A_y)", "A_x^2 + A_y^2", "sqrt(A_x^2 + A_y^2)"], a: 3 },
+    { q: "The law of vector addition which states that a + b = b + a is known as the:", c: ["Association Law", "Transitivity Law", "Distributive Law", "Cumulative Law"], a: 3 },
+    { q: "The law of vector addition which states that (a + b) + c = a + (b + c) is known as the:", c: ["Cumulative Law", "Distributive Law", "Scalar Law", "Associative Law"], a: 3 },
+    { q: "The product of two vectors that yields a scalar quantity (e.g., a . b = ab cos(theta)) is called the:", c: ["Vector Product", "Cross Product", "Tensor Product", "Scalar (Dot) Product"], a: 3 },
+    { q: "If c = a x b, the resulting vector c is always directed:", c: ["Parallel to a", "In the plane of a and b", "Opposite to b", "Perpendicular to the plane formed by a and b"], a: 3 },
+
+    // --- TOPIC 4: Kinematics (1-D Motion) (14 Qs) ---
+    { q: "What term is defined as the mathematical description of motion of an object *without* referring to the cause of the motion?", c: ["Dynamics", "Mechanics", "Statics", "Kinematics"], a: 3 },
+    { q: "For a particle moving along a straight line, the change in position (Delta X) *without* specifying direction is equal to the:", c: ["Velocity", "Acceleration", "Displacement", "Distance covered"], a: 3 },
+    { q: "The rate of change of **distance covered** with time is called:", c: ["Acceleration", "Displacement", "Velocity", "Speed"], a: 3 },
+    { q: "If the rate of change of distance covered with time is **constant**, the speed (velocity) is said to be:", c: ["Instantaneous", "Accelerating", "Non-uniform", "Uniform"], a: 3 },
+    { q: "The rate of change of velocity with time is known as:", c: ["Displacement", "Speed", "Kinematics", "Acceleration"], a: 3 },
+    { q: "A particle starts from rest (U=0) and accelerates uniformly at 4.0 m/s^2 for 5.0 seconds. What is its final velocity (V)?", c: ["10.0 m/s", "16.0 m/s", "40.0 m/s", "20.0 m/s"], a: 3 },
+    { q: "A car increases its velocity from an initial speed U=10 m/s to a final speed V=30 m/s over a period of t=5.0 s. What is the magnitude of the uniform acceleration (a)?", c: ["2.0 m/s^2", "5.0 m/s^2", "3.0 m/s^2", "4.0 m/s^2"], a: 3 },
+    { q: "A car is traveling at 15 m/s and covers 100 m while accelerating uniformly to a final velocity of 25 m/s. What is the acceleration (a)? (Use V^2 = U^2 + 2aS)", c: ["2.5 m/s^2", "1.5 m/s^2", "3.0 m/s^2", "2.0 m/s^2"], a: 3 },
+    { q: "A car starts from rest (U=0) and moves with constant acceleration a=2.0 m/s^2. How far (S) does it travel in 8.0 seconds? (Use S = UT + (1/2)AT^2)", c: ["16.0 m", "32.0 m", "128 m", "64.0 m"], a: 3 },
+    { q: "A cyclist with an initial velocity of 10 m/s applies brakes and decelerates uniformly at 2.0 m/s^2 until they stop (V=0). How long (t) does the deceleration take?", c: ["20.0 s", "10.0 s", "2.0 s", "5.0 s"], a: 3 },
+    { q: "What is the final velocity (V) of an object starting from rest (U=0) after covering a distance S with constant acceleration a?", c: ["V = U + aS", "V = S/t", "V = aS^2", "V = sqrt(2aS)"], a: 3 },
+    { q: "An object is thrown vertically upwards with initial velocity U. Ignoring air resistance, the acceleration (a) it experiences while rising is:", c: ["Positive and increasing", "Zero", "Negative and increasing", "Negative and constant (-9.8 m/s^2)"], a: 3 },
+    { q: "The point at which an object thrown vertically upward momentarily stops before falling is when its:", c: ["Acceleration is zero", "Initial velocity is zero", "Total energy is zero", "Final velocity is zero"], a: 3 },
+    { q: "A ball is dropped from a height. The time (t) it takes to reach the ground is calculated using the formula:", c: ["t = S/U", "t = sqrt(2g/S)", "t = U/g", "t = sqrt(2S/g)"], a: 3 },
+
+    // --- TOPIC 5: Relative Motion (6 Qs) ---
+    { q: "Motion is defined as the change in position of an object as a function of time relative to a:", c: ["Fixed point", "The center of the earth", "An absolute rest frame", "A coordinate system (reference frame)"], a: 3 },
+    { q: "All velocities are **relative** and have no significance unless what is specified?", c: ["Distance traveled", "Total time elapsed", "The mass of the object", "The observer (reference frame)"], a: 3 },
+    { q: "Object A is moving right at 5 m/s and object B is moving right at 20 m/s. What is the velocity of B with respect to A (v_BA)?", c: ["-15 m/s", "5 m/s", "25 m/s", "15 m/s"], a: 3 },
+    { q: "Object A moves left at 10 m/s (v_A = -10 m/s) and object B moves right at 12 m/s (v_B = +12 m/s). What is the velocity of A with respect to B (v_AB)? (Use v_AB = v_A - v_B)", c: ["+2 m/s", "+22 m/s", "-2 m/s", "-22 m/s"], a: 3 },
+    { q: "A train (A) moves right at 40 m/s, and a train (B) moves left at 20 m/s. What is the magnitude of the velocity of B relative to A (|v_BA|)?", c: ["20 m/s", "40 m/s", "-60 m/s", "60 m/s"], a: 3 },
+    { q: "The equation for relative position of particle P with respect to the origin in frame S is r_P/S = r_P/S' + r_S'/S. This is an example of the basic concept of:", c: ["Lorentz contraction", "Time Dilation", "Vector addition of velocity", "Relative Position (or Galilean Transformation)"], a: 3 }
+];
+
+
+
+
+ // *** NEW PAGINATION CONSTANTS ***
+    const QUESTIONS_PER_PAGE = 10;
+    const total = QUESTIONS.length;
+    const totalPages = Math.ceil(total / QUESTIONS_PER_PAGE);
+
+    // *** UPDATED STATE ***
+    // 'page' tracks the current screen number (0-indexed)
+    let state = { page: 0, answers: Array(total).fill(null) }; 
+
+    function renderQuestion() {
+        const area = document.getElementById('q-area');
+        const startIdx = state.page * QUESTIONS_PER_PAGE;
+        const endIdx = Math.min(startIdx + QUESTIONS_PER_PAGE, total);
+
+        // Update display text to reflect the current batch of questions
+        const startQ = startIdx + 1;
+        const endQ = endIdx;
+        
+        // Update Progress Bar (based on page number)
+        const progress = Math.round((state.page / totalPages) * 100);
+        document.getElementById('progress-bar').style.width = progress + '%';
+
+        // Update question counter (showing questions answered/total)
+        // Since we are showing 10 questions at a time, we will display Q X-Y / Total
+        document.getElementById('q-num').textContent = `${startQ}-${endQ}`;
+        document.getElementById('q-total').textContent = total;
+        
+        area.innerHTML = '';
+        
+        // Loop through the 10 questions for the current page
+        for (let i = startIdx; i < endIdx; i++) {
+            const q = QUESTIONS[i];
+            const qEl = document.createElement('div');
+            qEl.innerHTML = `<div class="question">${i + 1}. ${q.q}</div>`;
+            
+            const choices = document.createElement('div'); 
+            choices.className = 'choices';
+            
+            q.c.forEach((choice, choiceIndex) => {
+                const btn = document.createElement('div');
+                btn.className = 'choice'; 
+                btn.tabIndex = 0; 
+                btn.textContent = String.fromCharCode(65 + choiceIndex) + '. ' + choice;
+                
+                // Highlight if this question (i) has an answer (state.answers[i]) that matches the choiceIndex
+                if (state.answers[i] === choiceIndex) btn.classList.add('selected');
+
+                btn.addEventListener('click', () => {
+                    // Set the answer for the specific question (i), not the page index
+                    state.answers[i] = choiceIndex;
+                    
+                    // Rerender the whole page to update the selected state correctly for all choices on this page
+                    renderQuestion();
+                });
+                choices.appendChild(btn);
+            });
+            qEl.appendChild(choices);
+            area.appendChild(qEl);
+            area.appendChild(document.createElement('hr')); // Separator between questions
+        }
+    }
+
+    // *** UPDATED CONTROL BUTTONS: Navigate by Page ***
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        if (state.page < totalPages - 1) {
+            state.page++;
+            renderQuestion();
+        }
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        if (state.page > 0) {
+            state.page--;
+            renderQuestion();
+        }
+    });
+
+    // Submitting and grading logic remains the same (it processes all 'total' questions)
+    document.getElementById('submitBtn').addEventListener('click', () => {
+        const unanswered = state.answers.filter(a => a === null).length;
+        if (unanswered > 0) {
+            if (!confirm(`You have ${unanswered} unanswered questions. Submit anyway?`)) return;
+        }
+        gradeQuiz();
+    });
+
+    function gradeQuiz() {
+        let correct = 0;
+        const review = [];
+        for (let i = 0; i < total; i++) {
+            const user = state.answers[i];
+            const correctIdx = QUESTIONS[i].a;
+            const ok = user === correctIdx;
+            if (ok) correct++;
+            review.push({ i, q: QUESTIONS[i].q, choices: QUESTIONS[i].c, user, correctIdx, ok });
+        }
+        showResult(correct, review);
+    }
+
+    function showResult(score, review) {
+        document.getElementById('quiz-card').style.display = 'none';
+        const area = document.getElementById('result-area');
+        area.style.display = 'block';
+        const title = document.getElementById('score-title');
+        title.textContent = `You scored ${score} out of ${total}`;
+        const pct = Math.round((score / total) * 100);
+        document.getElementById('score-summary').textContent = `Percentage: ${pct}%`;
+
+        const list = document.getElementById('review-list'); list.innerHTML = '';
+        review.forEach(item => {
+            const div = document.createElement('div'); div.className = 'q-review';
+            const head = document.createElement('div'); head.style.fontWeight = '700'; head.textContent = `${item.i + 1}. ${item.q}`;
+            const userAns = document.createElement('div'); userAns.style.marginTop = '6px';
+            const ua = item.user === null ? 'No answer' : String.fromCharCode(65 + item.user) + '. ' + item.choices[item.user];
+            const ca = String.fromCharCode(65 + item.correctIdx) + '. ' + item.choices[item.correctIdx];
+            userAns.innerHTML = `<div><strong>Your answer:</strong> ${ua}</div><div style="margin-top:4px"><strong>Correct answer:</strong> ${ca}</div>`;
+            if (item.ok) userAns.style.color = 'lightgreen'; else userAns.style.color = '#fca5a5';
+            div.appendChild(head); div.appendChild(userAns);
+            list.appendChild(div);
+        });
+    }
+
+    document.getElementById('retryBtn').addEventListener('click', () => {
+        // reset
+        state = { page: 0, answers: Array(total).fill(null) };
+        document.getElementById('result-area').style.display = 'none';
+        document.getElementById('quiz-card').style.display = 'block';
+        renderQuestion();
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+        const data = { answers: state.answers, questions: QUESTIONS };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'cos101_module1-2_results.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    // init
+    renderQuestion();
+</script>
+
+
+</script></body>
+</html>
